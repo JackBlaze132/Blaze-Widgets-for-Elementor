@@ -24,6 +24,24 @@ class Assets_Manager {
 		add_action( 'elementor/frontend/after_register_styles', [ $this, 'register_frontend_assets' ] );
 		add_action( 'elementor/editor/after_enqueue_styles', [ $this, 'enqueue_editor_assets' ] );
 		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_admin_assets' ] );
+		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_admin_menu_icon_css' ] );
+	}
+
+	/**
+	 * Enqueue the branded sidebar menu icon tile on every admin screen.
+	 *
+	 * The top-level Blaze menu must carry its gradient tile from the very
+	 * first load (other admin pages do not load the page-level admin.css).
+	 */
+	public function enqueue_admin_menu_icon_css(): void {
+		if ( file_exists( BLAZE_WIDGETS_PATH . 'assets/css/admin-menu.css' ) ) {
+			wp_enqueue_style(
+				'blaze-widgets-admin-menu',
+				BLAZE_WIDGETS_URL . 'assets/css/admin-menu.css',
+				[],
+				BLAZE_WIDGETS_VERSION
+			);
+		}
 	}
 
 	/**

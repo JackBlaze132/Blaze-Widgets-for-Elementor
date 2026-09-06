@@ -40,7 +40,7 @@ class Admin_Menu {
 			'manage_options',
 			'blaze-widgets',
 			[ $this, 'render_dashboard_page' ],
-			'dashicons-screenoptions',
+			BLAZE_WIDGETS_URL . 'assets/img/blaze-icon.svg',
 			58
 		);
 
@@ -192,120 +192,173 @@ class Admin_Menu {
 	public function render_dashboard_page(): void {
 		$custom_widgets = Custom_Widget_Storage::get_all();
 		?>
-		<div class="wrap">
-			<h1 class="wp-heading-inline"><?php esc_html_e( 'Blaze Widgets & Components', 'blaze-widgets-for-elementor' ); ?></h1>
-			<a href="<?php echo esc_url( admin_url( 'admin.php?page=blaze-widgets-builder' ) ); ?>" class="page-title-action">
-				<?php esc_html_e( 'Create New Component', 'blaze-widgets-for-elementor' ); ?>
-			</a>
-			<hr class="wp-header-end">
+		<div class="wrap blaze-wrap">
+			<header class="blaze-header">
+				<span class="blaze-header__logo">
+					<img src="<?php echo esc_url( BLAZE_WIDGETS_URL . 'assets/img/blaze-icon.svg' ); ?>" alt="" width="30" height="30">
+				</span>
+				<div class="blaze-header__titles">
+					<h1><?php esc_html_e( 'Blaze Widgets & Components', 'blaze-widgets-for-elementor' ); ?></h1>
+					<p><?php esc_html_e( 'Your custom Elementor component library, all in one place.', 'blaze-widgets-for-elementor' ); ?></p>
+				</div>
+				<span class="blaze-header__action">
+					<a href="<?php echo esc_url( admin_url( 'admin.php?page=blaze-widgets-builder' ) ); ?>" class="blaze-btn blaze-btn--primary">
+						<span class="dashicons dashicons-plus-alt2" aria-hidden="true"></span>
+						<?php esc_html_e( 'Create New Component', 'blaze-widgets-for-elementor' ); ?>
+					</a>
+				</span>
+			</header>
 
 			<?php if ( isset( $_GET['status'] ) ) : ?>
-				<div class="notice notice-success is-dismissible">
-					<p>
-						<?php
-						if ( 'saved' === $_GET['status'] ) {
-							esc_html_e( 'Widget saved successfully and registered for Elementor!', 'blaze-widgets-for-elementor' );
-						} elseif ( 'deleted' === $_GET['status'] ) {
-							esc_html_e( 'Widget removed successfully.', 'blaze-widgets-for-elementor' );
-						} elseif ( 'imported' === $_GET['status'] ) {
-							esc_html_e( 'Widget imported and registered successfully!', 'blaze-widgets-for-elementor' );
-						}
-						?>
-					</p>
+				<div class="blaze-notices">
+					<div class="notice notice-success is-dismissible">
+						<p>
+							<?php
+							if ( 'saved' === $_GET['status'] ) {
+								esc_html_e( 'Widget saved successfully and registered for Elementor!', 'blaze-widgets-for-elementor' );
+							} elseif ( 'deleted' === $_GET['status'] ) {
+								esc_html_e( 'Widget removed successfully.', 'blaze-widgets-for-elementor' );
+							} elseif ( 'imported' === $_GET['status'] ) {
+								esc_html_e( 'Widget imported and registered successfully!', 'blaze-widgets-for-elementor' );
+							}
+							?>
+						</p>
+					</div>
 				</div>
 			<?php endif; ?>
 
-			<div style="display: flex; gap: 20px; margin-top: 20px;">
+			<div class="blaze-dashboard">
 				<!-- Left column: Widget Table -->
-				<div style="flex: 2;">
-					<h2><?php esc_html_e( 'Active Widgets Library', 'blaze-widgets-for-elementor' ); ?></h2>
-					<table class="wp-list-table widefat fixed striped table-view-list">
-						<thead>
-							<tr>
-								<th><?php esc_html_e( 'Title & Name', 'blaze-widgets-for-elementor' ); ?></th>
-								<th><?php esc_html_e( 'Type', 'blaze-widgets-for-elementor' ); ?></th>
-								<th><?php esc_html_e( 'Slug / Handle', 'blaze-widgets-for-elementor' ); ?></th>
-								<th><?php esc_html_e( 'Status', 'blaze-widgets-for-elementor' ); ?></th>
-								<th><?php esc_html_e( 'Actions', 'blaze-widgets-for-elementor' ); ?></th>
-							</tr>
-						</thead>
-						<tbody>
-							<!-- Core Built-in Widgets -->
-							<tr>
-								<td><strong><?php esc_html_e( 'Blaze Example Card', 'blaze-widgets-for-elementor' ); ?></strong></td>
-								<td><span class="dashicons dashicons-lock" title="Built-in code widget"></span> <?php esc_html_e( 'Built-in Module', 'blaze-widgets-for-elementor' ); ?></td>
-								<td><code>blaze-example-card</code></td>
-								<td><span style="color: green; font-weight: bold;"><?php esc_html_e( 'Active', 'blaze-widgets-for-elementor' ); ?></span></td>
-								<td><em><?php esc_html_e( 'Code-managed', 'blaze-widgets-for-elementor' ); ?></em></td>
-							</tr>
-
-							<!-- Custom User Created Widgets -->
-							<?php if ( ! empty( $custom_widgets ) ) : ?>
-								<?php foreach ( $custom_widgets as $w_slug => $widget ) : ?>
+				<section class="blaze-table">
+					<div class="blaze-card">
+						<div class="blaze-card__header">
+							<span class="dashicons dashicons-layout" aria-hidden="true"></span>
+							<h2><?php esc_html_e( 'Active Widgets Library', 'blaze-widgets-for-elementor' ); ?></h2>
+						</div>
+						<div class="blaze-card__body" style="padding-top: 12px;">
+							<table class="wp-list-table widefat fixed table-view-list">
+								<thead>
 									<tr>
-										<td><strong><?php echo esc_html( $widget['title'] ?? $w_slug ); ?></strong></td>
-										<td><span class="dashicons dashicons-admin-customizer"></span> <?php esc_html_e( 'Custom Component', 'blaze-widgets-for-elementor' ); ?></td>
-										<td><code>blaze-<?php echo esc_html( $w_slug ); ?></code></td>
-										<td>
-											<?php if ( ! empty( $widget['active'] ) ) : ?>
-												<span style="color: green; font-weight: bold;"><?php esc_html_e( 'Active', 'blaze-widgets-for-elementor' ); ?></span>
-											<?php else : ?>
-												<span style="color: #999;"><?php esc_html_e( 'Inactive', 'blaze-widgets-for-elementor' ); ?></span>
-											<?php endif; ?>
-										</td>
-										<td>
-											<a href="<?php echo esc_url( admin_url( 'admin.php?page=blaze-widgets-builder&edit=' . $w_slug ) ); ?>">
-												<?php esc_html_e( 'Edit', 'blaze-widgets-for-elementor' ); ?>
-											</a> | 
-											<a href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin.php?page=blaze-widgets&action=export_blaze_widget&slug=' . $w_slug ), 'blaze_export_widget_' . $w_slug ) ); ?>">
-												<?php esc_html_e( 'Export', 'blaze-widgets-for-elementor' ); ?>
-											</a> | 
-											<a href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin.php?page=blaze-widgets&action=delete_blaze_widget&slug=' . $w_slug ), 'blaze_delete_widget_' . $w_slug ) ); ?>" onclick="return confirm('<?php esc_attr_e( 'Are you sure you want to remove this widget?', 'blaze-widgets-for-elementor' ); ?>');" style="color: #a00;">
-												<?php esc_html_e( 'Delete', 'blaze-widgets-for-elementor' ); ?>
-											</a>
-										</td>
+										<th><?php esc_html_e( 'Title & Name', 'blaze-widgets-for-elementor' ); ?></th>
+										<th><?php esc_html_e( 'Type', 'blaze-widgets-for-elementor' ); ?></th>
+										<th><?php esc_html_e( 'Slug / Handle', 'blaze-widgets-for-elementor' ); ?></th>
+										<th><?php esc_html_e( 'Status', 'blaze-widgets-for-elementor' ); ?></th>
+										<th><?php esc_html_e( 'Actions', 'blaze-widgets-for-elementor' ); ?></th>
 									</tr>
-								<?php endforeach; ?>
-							<?php endif; ?>
-						</tbody>
-					</table>
-				</div>
+								</thead>
+								<tbody>
+									<!-- Core Built-in Widgets -->
+									<tr>
+										<td><span class="blaze-table__title"><?php esc_html_e( 'Blaze Example Card', 'blaze-widgets-for-elementor' ); ?></span></td>
+										<td>
+											<span class="blaze-table__type">
+												<span class="dashicons dashicons-lock" aria-hidden="true"></span>
+												<?php esc_html_e( 'Built-in Module', 'blaze-widgets-for-elementor' ); ?>
+											</span>
+										</td>
+										<td><span class="blaze-table__handle">blaze-example-card</span></td>
+										<td><span class="blaze-pill blaze-pill--active"><?php esc_html_e( 'Active', 'blaze-widgets-for-elementor' ); ?></span></td>
+										<td><span class="blaze-table__type"><?php esc_html_e( 'Code-managed', 'blaze-widgets-for-elementor' ); ?></span></td>
+									</tr>
 
-				<!-- Right column: Upload / Import Box -->
-				<div style="flex: 1;">
-					<div class="postbox" style="padding: 16px;">
-						<h2><?php esc_html_e( 'Upload Custom Component', 'blaze-widgets-for-elementor' ); ?></h2>
-						<p><?php esc_html_e( 'Upload a custom widget definition (.json template) exported from Blaze Widgets or created manually.', 'blaze-widgets-for-elementor' ); ?></p>
-						<form method="post" enctype="multipart/form-data" action="<?php echo esc_url( admin_url( 'admin.php?page=blaze-widgets' ) ); ?>">
-							<?php wp_nonce_field( 'blaze_import_widget_nonce' ); ?>
-							<input type="hidden" name="blaze_action" value="import_widget">
-							<p>
-								<input type="file" name="widget_file" accept=".json" required>
-							</p>
-							<p>
-								<button type="submit" class="button button-primary">
-									<span class="dashicons dashicons-upload" style="vertical-align: middle;"></span>
-									<?php esc_html_e( 'Import & Register', 'blaze-widgets-for-elementor' ); ?>
-								</button>
-							</p>
-						</form>
-						<p>
-							<a href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin.php?page=blaze-widgets&action=download_blaze_template' ), 'blaze_download_template_nonce' ) ); ?>" class="button">
-								<span class="dashicons dashicons-download" style="vertical-align: middle;"></span>
-								<?php esc_html_e( 'Download Blank Template', 'blaze-widgets-for-elementor' ); ?>
-							</a>
-						</p>
+									<!-- Custom User Created Widgets -->
+									<?php if ( ! empty( $custom_widgets ) ) : ?>
+										<?php foreach ( $custom_widgets as $w_slug => $widget ) : ?>
+											<tr>
+												<td><span class="blaze-table__title"><?php echo esc_html( $widget['title'] ?? $w_slug ); ?></span></td>
+												<td>
+													<span class="blaze-table__type">
+														<span class="dashicons dashicons-admin-customizer" aria-hidden="true"></span>
+														<?php esc_html_e( 'Custom Component', 'blaze-widgets-for-elementor' ); ?>
+													</span>
+												</td>
+												<td><span class="blaze-table__handle">blaze-<?php echo esc_html( $w_slug ); ?></span></td>
+												<td>
+													<?php if ( ! empty( $widget['active'] ) ) : ?>
+														<span class="blaze-pill blaze-pill--active"><?php esc_html_e( 'Active', 'blaze-widgets-for-elementor' ); ?></span>
+													<?php else : ?>
+														<span class="blaze-pill blaze-pill--inactive"><?php esc_html_e( 'Inactive', 'blaze-widgets-for-elementor' ); ?></span>
+													<?php endif; ?>
+												</td>
+												<td>
+													<div class="blaze-actions">
+														<a class="blaze-action" href="<?php echo esc_url( admin_url( 'admin.php?page=blaze-widgets-builder&edit=' . $w_slug ) ); ?>" title="<?php esc_attr_e( 'Edit widget', 'blaze-widgets-for-elementor' ); ?>">
+															<span class="dashicons dashicons-edit" aria-hidden="true"></span>
+															<span class="screen-reader-text"><?php esc_html_e( 'Edit', 'blaze-widgets-for-elementor' ); ?></span>
+														</a>
+														<a class="blaze-action" href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin.php?page=blaze-widgets&action=export_blaze_widget&slug=' . $w_slug ), 'blaze_export_widget_' . $w_slug ) ); ?>" title="<?php esc_attr_e( 'Export widget as JSON', 'blaze-widgets-for-elementor' ); ?>">
+															<span class="dashicons dashicons-download" aria-hidden="true"></span>
+															<span class="screen-reader-text"><?php esc_html_e( 'Export', 'blaze-widgets-for-elementor' ); ?></span>
+														</a>
+														<a class="blaze-action blaze-action--danger" href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin.php?page=blaze-widgets&action=delete_blaze_widget&slug=' . $w_slug ), 'blaze_delete_widget_' . $w_slug ) ); ?>" title="<?php esc_attr_e( 'Delete widget', 'blaze-widgets-for-elementor' ); ?>" onclick="return confirm('<?php esc_attr_e( 'Are you sure you want to remove this widget?', 'blaze-widgets-for-elementor' ); ?>');">
+															<span class="dashicons dashicons-trash" aria-hidden="true"></span>
+															<span class="screen-reader-text"><?php esc_html_e( 'Delete', 'blaze-widgets-for-elementor' ); ?></span>
+														</a>
+													</div>
+												</td>
+											</tr>
+										<?php endforeach; ?>
+									<?php endif; ?>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</section>
+
+				<!-- Right column: Upload / Import + Tips -->
+				<aside class="blaze-sidebar">
+					<div class="blaze-card">
+						<div class="blaze-card__header">
+							<span class="dashicons dashicons-upload" aria-hidden="true"></span>
+							<h2><?php esc_html_e( 'Upload Custom Component', 'blaze-widgets-for-elementor' ); ?></h2>
+						</div>
+						<div class="blaze-card__body">
+							<div class="blaze-upload">
+								<div class="blaze-upload__icon">
+									<span class="dashicons dashicons-portfolio" aria-hidden="true"></span>
+								</div>
+								<p><?php esc_html_e( 'Upload a widget definition (.json) exported from Blaze Widgets or created manually.', 'blaze-widgets-for-elementor' ); ?></p>
+								<form method="post" enctype="multipart/form-data" action="<?php echo esc_url( admin_url( 'admin.php?page=blaze-widgets' ) ); ?>">
+									<?php wp_nonce_field( 'blaze_import_widget_nonce' ); ?>
+									<input type="hidden" name="blaze_action" value="import_widget">
+									<input type="file" name="widget_file" accept=".json" required>
+									<button type="submit" class="blaze-btn blaze-btn--primary">
+										<span class="dashicons dashicons-upload" aria-hidden="true"></span>
+										<?php esc_html_e( 'Import & Register', 'blaze-widgets-for-elementor' ); ?>
+									</button>
+								</form>
+								<p style="margin-top: 12px; margin-bottom: 0;">
+									<a href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin.php?page=blaze-widgets&action=download_blaze_template' ), 'blaze_download_template_nonce' ) ); ?>" class="blaze-btn">
+										<span class="dashicons dashicons-download" aria-hidden="true"></span>
+										<?php esc_html_e( 'Download Blank Template', 'blaze-widgets-for-elementor' ); ?>
+									</a>
+								</p>
+							</div>
+						</div>
 					</div>
 
-					<div class="postbox" style="padding: 16px;">
-						<h3><?php esc_html_e( 'Quick Tips', 'blaze-widgets-for-elementor' ); ?></h3>
-						<ul style="list-style: disc; padding-left: 20px;">
-							<li><?php esc_html_e( 'All active widgets automatically appear under the "Blaze Widgets" category in Elementor.', 'blaze-widgets-for-elementor' ); ?></li>
-							<li><?php esc_html_e( 'You can define custom dynamic fields with dynamic tags (ACF, featured image, post meta) supported natively.', 'blaze-widgets-for-elementor' ); ?></li>
-						</ul>
+					<div class="blaze-card">
+						<div class="blaze-card__header">
+							<span class="dashicons dashicons-lightbulb" aria-hidden="true"></span>
+							<h2><?php esc_html_e( 'Quick Tips', 'blaze-widgets-for-elementor' ); ?></h2>
+						</div>
+						<div class="blaze-card__body">
+							<ul class="blaze-tips">
+								<li>
+									<span class="dashicons dashicons-yes-alt" aria-hidden="true"></span>
+									<span><?php esc_html_e( 'All active widgets appear under the "Blaze Widgets" category in Elementor.', 'blaze-widgets-for-elementor' ); ?></span>
+								</li>
+								<li>
+									<span class="dashicons dashicons-yes-alt" aria-hidden="true"></span>
+									<span><?php esc_html_e( 'Dynamic tags (ACF, featured image, post meta) are supported natively on every control.', 'blaze-widgets-for-elementor' ); ?></span>
+								</li>
+							</ul>
+						</div>
 					</div>
-				</div>
+				</aside>
 			</div>
+
+			<footer class="blaze-footer-pattern blaze-footer-pattern--wave" aria-hidden="true"></footer>
 		</div>
 		<?php
 	}
@@ -346,93 +399,122 @@ class Admin_Menu {
 			JSON_PRETTY_PRINT
 		);
 		?>
-		<div class="wrap">
-			<h1><?php echo $widget ? esc_html__( 'Edit Custom Component', 'blaze-widgets-for-elementor' ) : esc_html__( 'Create New Custom Component', 'blaze-widgets-for-elementor' ); ?></h1>
-			<p><?php esc_html_e( 'Define your Elementor widget controls, HTML template with Dynamic Tag placeholders, scoped CSS, and scripts.', 'blaze-widgets-for-elementor' ); ?></p>
+		<div class="wrap blaze-wrap blaze-builder">
+			<header class="blaze-header">
+				<span class="blaze-header__logo">
+					<img src="<?php echo esc_url( BLAZE_WIDGETS_URL . 'assets/img/blaze-icon.svg' ); ?>" alt="" width="30" height="30">
+				</span>
+				<div class="blaze-header__titles">
+					<h1><?php echo $widget ? esc_html__( 'Edit Custom Component', 'blaze-widgets-for-elementor' ) : esc_html__( 'Create New Custom Component', 'blaze-widgets-for-elementor' ); ?></h1>
+					<p><?php esc_html_e( 'Define your controls, HTML template with Dynamic Tag placeholders, scoped CSS, and scripts.', 'blaze-widgets-for-elementor' ); ?></p>
+				</div>
+				<span class="blaze-header__action">
+					<a href="<?php echo esc_url( admin_url( 'admin.php?page=blaze-widgets' ) ); ?>" class="blaze-btn">
+						<span class="dashicons dashicons-arrow-left-alt2" aria-hidden="true"></span>
+						<?php esc_html_e( 'Back to Library', 'blaze-widgets-for-elementor' ); ?>
+					</a>
+				</span>
+			</header>
 
-			<div class="notice notice-info inline">
-				<p>
-					<strong><?php esc_html_e( 'Template reference:', 'blaze-widgets-for-elementor' ); ?></strong><br>
-					<?php esc_html_e( 'Control types:', 'blaze-widgets-for-elementor' ); ?>
-					<code>text</code>, <code>textarea</code>, <code>wysiwyg</code>, <code>url</code>, <code>media</code>, <code>color</code>, <code>select</code>, <code>switcher</code>, <code>number</code>, <code>repeater</code>, <code>typography</code>, <code>border</code>, <code>box_shadow</code>.<br>
-					<?php esc_html_e( 'Placeholders:', 'blaze-widgets-for-elementor' ); ?>
-					<code>{{title}}</code> <?php esc_html_e( '(text)', 'blaze-widgets-for-elementor' ); ?>,
-					<code>{{description.html}}</code> <?php esc_html_e( '(rich)', 'blaze-widgets-for-elementor' ); ?>,
-					<code>{{image}}</code> <?php esc_html_e( '(URL)', 'blaze-widgets-for-elementor' ); ?>.
-					<code>typography</code>/<code>border</code>/<code>box_shadow</code> use <code>"selector"</code>.<br>
-					<?php esc_html_e( 'Repeaters:', 'blaze-widgets-for-elementor' ); ?>
-					<code>{"type":"repeater","fields":[...]}</code> <?php esc_html_e( 'looped with', 'blaze-widgets-for-elementor' ); ?>
-					<code>{{#items}}...{{/items}}</code>. <?php esc_html_e( 'Server-rendered expanded row:', 'blaze-widgets-for-elementor' ); ?>
-					<code>"active_class"</code> + <code>"active_setting"</code> + <code>"active_index_base"</code> + <code>{{items_active_class}}</code>.
-				</p>
+			<div class="blaze-card">
+				<div class="blaze-card__body">
+					<div class="blaze-reference">
+						<h3>
+							<span class="dashicons dashicons-editor-help" aria-hidden="true"></span>
+							<?php esc_html_e( 'Template reference', 'blaze-widgets-for-elementor' ); ?>
+						</h3>
+						<p>
+							<?php esc_html_e( 'Control types:', 'blaze-widgets-for-elementor' ); ?>
+							<code>text</code>, <code>textarea</code>, <code>wysiwyg</code>, <code>url</code>, <code>media</code>, <code>color</code>, <code>select</code>, <code>switcher</code>, <code>number</code>, <code>repeater</code>, <code>typography</code>, <code>border</code>, <code>box_shadow</code>.
+						</p>
+						<p>
+							<?php esc_html_e( 'Placeholders:', 'blaze-widgets-for-elementor' ); ?>
+							<code>{{title}}</code> <?php esc_html_e( '(text)', 'blaze-widgets-for-elementor' ); ?>,
+							<code>{{description.html}}</code> <?php esc_html_e( '(rich)', 'blaze-widgets-for-elementor' ); ?>,
+							<code>{{image}}</code> <?php esc_html_e( '(URL)', 'blaze-widgets-for-elementor' ); ?>.
+							<code>typography</code>/<code>border</code>/<code>box_shadow</code> <?php esc_html_e( 'use', 'blaze-widgets-for-elementor' ); ?> <code>"selector"</code>.
+						</p>
+						<p>
+							<?php esc_html_e( 'Repeaters:', 'blaze-widgets-for-elementor' ); ?>
+							<code>{"type":"repeater","fields":[...]}</code> <?php esc_html_e( 'looped with', 'blaze-widgets-for-elementor' ); ?>
+							<code>{{#items}}...{{/items}}</code>. <?php esc_html_e( 'Server-rendered expanded row:', 'blaze-widgets-for-elementor' ); ?>
+							<code>"active_class"</code> + <code>"active_setting"</code> + <code>"active_index_base"</code> + <code>{{items_active_class}}</code>.
+						</p>
+					</div>
+
+					<form method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=blaze-widgets' ) ); ?>" data-blaze-builder>
+						<?php wp_nonce_field( 'blaze_save_widget_nonce' ); ?>
+						<input type="hidden" name="blaze_action" value="save_widget">
+
+						<table class="form-table">
+							<tr>
+								<th scope="row"><label for="title"><?php esc_html_e( 'Component Title', 'blaze-widgets-for-elementor' ); ?></label></th>
+								<td>
+									<input name="title" id="title" type="text" class="regular-text" value="<?php echo esc_attr( $title ); ?>" required placeholder="e.g., Blaze Hero Banner">
+								</td>
+							</tr>
+							<tr>
+								<th scope="row"><label for="slug"><?php esc_html_e( 'Unique Slug', 'blaze-widgets-for-elementor' ); ?></label></th>
+								<td>
+									<input name="slug" id="slug" type="text" class="regular-text" value="<?php echo esc_attr( $slug ); ?>" <?php echo $widget ? 'readonly' : 'required'; ?> placeholder="e.g., hero-banner">
+									<p class="description"><?php esc_html_e( 'Unique identifier. Will be registered in Elementor as blaze-{slug}.', 'blaze-widgets-for-elementor' ); ?></p>
+								</td>
+							</tr>
+							<tr>
+								<th scope="row"><label for="icon"><?php esc_html_e( 'Elementor Icon Class', 'blaze-widgets-for-elementor' ); ?></label></th>
+								<td>
+									<input name="icon" id="icon" type="text" class="regular-text" value="<?php echo esc_attr( $icon ); ?>" placeholder="eicon-code, eicon-banner, etc.">
+								</td>
+							</tr>
+							<tr>
+								<th scope="row"><label for="controls_json"><?php esc_html_e( 'Controls Definition (JSON)', 'blaze-widgets-for-elementor' ); ?></label></th>
+								<td>
+									<textarea name="controls_json" id="controls_json" rows="8" class="large-text code"><?php echo esc_textarea( $controls ); ?></textarea>
+									<p class="description"><?php esc_html_e( 'Array of Elementor controls (types: text, textarea, wysiwyg, url, media, color, select, switcher). All support Dynamic Tags.', 'blaze-widgets-for-elementor' ); ?></p>
+								</td>
+							</tr>
+							<tr>
+								<th scope="row"><label for="html_tpl"><?php esc_html_e( 'HTML Template', 'blaze-widgets-for-elementor' ); ?></label></th>
+								<td>
+									<textarea name="html_tpl" id="html_tpl" rows="8" class="large-text code"><?php echo esc_textarea( $html_tpl ); ?></textarea>
+									<p class="description"><?php esc_html_e( 'Use {{control_id}} placeholders to inject dynamic control values, e.g., {{title}}, {{image.url}}, {{button_url.url}}.', 'blaze-widgets-for-elementor' ); ?></p>
+								</td>
+							</tr>
+							<tr>
+								<th scope="row"><label for="css"><?php esc_html_e( 'Scoped CSS', 'blaze-widgets-for-elementor' ); ?></label></th>
+								<td>
+									<textarea name="css" id="css" rows="6" class="large-text code"><?php echo esc_textarea( $css ); ?></textarea>
+								</td>
+							</tr>
+							<tr>
+								<th scope="row"><label for="js"><?php esc_html_e( 'Widget JavaScript (Optional)', 'blaze-widgets-for-elementor' ); ?></label></th>
+								<td>
+									<textarea name="js" id="js" rows="4" class="large-text code"><?php echo esc_textarea( $js ); ?></textarea>
+								</td>
+							</tr>
+							<tr>
+								<th scope="row"><?php esc_html_e( 'Active in Elementor', 'blaze-widgets-for-elementor' ); ?></th>
+								<td>
+									<label>
+										<input name="active" type="checkbox" value="1" <?php checked( $active ); ?>>
+										<?php esc_html_e( 'Enable this widget in the Elementor editor and frontend', 'blaze-widgets-for-elementor' ); ?>
+									</label>
+								</td>
+							</tr>
+						</table>
+
+						<p class="blaze-builder__submit">
+							<button type="submit" class="blaze-btn blaze-btn--primary">
+								<span class="dashicons dashicons-saved" aria-hidden="true"></span>
+								<?php esc_html_e( 'Save & Register Component', 'blaze-widgets-for-elementor' ); ?>
+							</button>
+							<a href="<?php echo esc_url( admin_url( 'admin.php?page=blaze-widgets' ) ); ?>" class="blaze-btn"><?php esc_html_e( 'Cancel', 'blaze-widgets-for-elementor' ); ?></a>
+						</p>
+					</form>
+				</div>
 			</div>
 
-			<form method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=blaze-widgets' ) ); ?>" data-blaze-builder>
-				<?php wp_nonce_field( 'blaze_save_widget_nonce' ); ?>
-				<input type="hidden" name="blaze_action" value="save_widget">
-
-				<table class="form-table">
-					<tr>
-						<th scope="row"><label for="title"><?php esc_html_e( 'Component Title', 'blaze-widgets-for-elementor' ); ?></label></th>
-						<td>
-							<input name="title" id="title" type="text" class="regular-text" value="<?php echo esc_attr( $title ); ?>" required placeholder="e.g., Blaze Hero Banner">
-						</td>
-					</tr>
-					<tr>
-						<th scope="row"><label for="slug"><?php esc_html_e( 'Unique Slug', 'blaze-widgets-for-elementor' ); ?></label></th>
-						<td>
-							<input name="slug" id="slug" type="text" class="regular-text" value="<?php echo esc_attr( $slug ); ?>" <?php echo $widget ? 'readonly' : 'required'; ?> placeholder="e.g., hero-banner">
-							<p class="description"><?php esc_html_e( 'Unique identifier. Will be registered in Elementor as blaze-{slug}.', 'blaze-widgets-for-elementor' ); ?></p>
-						</td>
-					</tr>
-					<tr>
-						<th scope="row"><label for="icon"><?php esc_html_e( 'Elementor Icon Class', 'blaze-widgets-for-elementor' ); ?></label></th>
-						<td>
-							<input name="icon" id="icon" type="text" class="regular-text" value="<?php echo esc_attr( $icon ); ?>" placeholder="eicon-code, eicon-banner, etc.">
-						</td>
-					</tr>
-					<tr>
-						<th scope="row"><label for="controls_json"><?php esc_html_e( 'Controls Definition (JSON)', 'blaze-widgets-for-elementor' ); ?></label></th>
-						<td>
-							<textarea name="controls_json" id="controls_json" rows="8" class="large-text code"><?php echo esc_textarea( $controls ); ?></textarea>
-							<p class="description"><?php esc_html_e( 'Array of Elementor controls (types: text, textarea, wysiwyg, url, media, color, select, switcher). All support Dynamic Tags.', 'blaze-widgets-for-elementor' ); ?></p>
-						</td>
-					</tr>
-					<tr>
-						<th scope="row"><label for="html_tpl"><?php esc_html_e( 'HTML Template', 'blaze-widgets-for-elementor' ); ?></label></th>
-						<td>
-							<textarea name="html_tpl" id="html_tpl" rows="8" class="large-text code"><?php echo esc_textarea( $html_tpl ); ?></textarea>
-							<p class="description"><?php esc_html_e( 'Use {{control_id}} placeholders to inject dynamic control values, e.g., {{title}}, {{image.url}}, {{button_url.url}}.', 'blaze-widgets-for-elementor' ); ?></p>
-						</td>
-					</tr>
-					<tr>
-						<th scope="row"><label for="css"><?php esc_html_e( 'Scoped CSS', 'blaze-widgets-for-elementor' ); ?></label></th>
-						<td>
-							<textarea name="css" id="css" rows="6" class="large-text code"><?php echo esc_textarea( $css ); ?></textarea>
-						</td>
-					</tr>
-					<tr>
-						<th scope="row"><label for="js"><?php esc_html_e( 'Widget JavaScript (Optional)', 'blaze-widgets-for-elementor' ); ?></label></th>
-						<td>
-							<textarea name="js" id="js" rows="4" class="large-text code"><?php echo esc_textarea( $js ); ?></textarea>
-						</td>
-					</tr>
-					<tr>
-						<th scope="row"><?php esc_html_e( 'Active in Elementor', 'blaze-widgets-for-elementor' ); ?></th>
-						<td>
-							<label>
-								<input name="active" type="checkbox" value="1" <?php checked( $active ); ?>>
-								<?php esc_html_e( 'Enable this widget in the Elementor editor and frontend', 'blaze-widgets-for-elementor' ); ?>
-							</label>
-						</td>
-					</tr>
-				</table>
-
-				<p class="submit">
-					<button type="submit" class="button button-primary"><?php esc_html_e( 'Save & Register Component', 'blaze-widgets-for-elementor' ); ?></button>
-					<a href="<?php echo esc_url( admin_url( 'admin.php?page=blaze-widgets' ) ); ?>" class="button"><?php esc_html_e( 'Cancel', 'blaze-widgets-for-elementor' ); ?></a>
-				</p>
-			</form>
+			<footer class="blaze-footer-pattern blaze-footer-pattern--wave" aria-hidden="true"></footer>
 		</div>
 		<?php
 	}
@@ -445,53 +527,74 @@ class Admin_Menu {
 		$enable_atomic_edit = ! empty( $settings['enable_atomic_edit'] );
 		$atomic_mode        = $settings['atomic_edit_mode'] ?? 'isolated';
 		?>
-		<div class="wrap">
-			<h1><?php esc_html_e( 'Blaze Widgets Settings & Integrations', 'blaze-widgets-for-elementor' ); ?></h1>
-			<p><?php esc_html_e( 'Configure general behaviors and optional integrations for your custom component library.', 'blaze-widgets-for-elementor' ); ?></p>
+		<div class="wrap blaze-wrap blaze-settings">
+			<header class="blaze-header">
+				<span class="blaze-header__logo">
+					<img src="<?php echo esc_url( BLAZE_WIDGETS_URL . 'assets/img/blaze-icon.svg' ); ?>" alt="" width="30" height="30">
+				</span>
+				<div class="blaze-header__titles">
+					<h1><?php esc_html_e( 'Blaze Widgets Settings', 'blaze-widgets-for-elementor' ); ?></h1>
+					<p><?php esc_html_e( 'Configure general behaviors and optional integrations for your component library.', 'blaze-widgets-for-elementor' ); ?></p>
+				</div>
+			</header>
 
 			<?php if ( isset( $_GET['status'] ) && 'settings_saved' === $_GET['status'] ) : ?>
-				<div class="notice notice-success is-dismissible">
-					<p><?php esc_html_e( 'Settings updated successfully.', 'blaze-widgets-for-elementor' ); ?></p>
+				<div class="blaze-notices">
+					<div class="notice notice-success is-dismissible">
+						<p><?php esc_html_e( 'Settings updated successfully.', 'blaze-widgets-for-elementor' ); ?></p>
+					</div>
 				</div>
 			<?php endif; ?>
 
-			<form method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=blaze-widgets-settings' ) ); ?>">
-				<?php wp_nonce_field( 'blaze_save_settings_nonce' ); ?>
-				<input type="hidden" name="blaze_action" value="save_settings">
+			<div class="blaze-card">
+				<div class="blaze-card__header">
+					<span class="dashicons dashicons-admin-plugins" aria-hidden="true"></span>
+					<h2><?php esc_html_e( 'Atomic Edit Compatibility', 'blaze-widgets-for-elementor' ); ?></h2>
+				</div>
+				<div class="blaze-card__body">
+					<p class="description">
+						<?php esc_html_e( 'Atomic Edit allows fine-grained micro-component editing and attributes injection. This feature is experimental and disabled by default.', 'blaze-widgets-for-elementor' ); ?>
+					</p>
 
-				<h2 class="title"><?php esc_html_e( 'Atomic Edit Compatibility', 'blaze-widgets-for-elementor' ); ?></h2>
-				<p class="description">
-					<?php esc_html_e( 'Atomic Edit allows fine-grained micro-component editing and attributes injection. This feature is experimental and disabled by default.', 'blaze-widgets-for-elementor' ); ?>
-				</p>
+					<form method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=blaze-widgets-settings' ) ); ?>">
+						<?php wp_nonce_field( 'blaze_save_settings_nonce' ); ?>
+						<input type="hidden" name="blaze_action" value="save_settings">
 
-				<table class="form-table">
-					<tr>
-						<th scope="row"><?php esc_html_e( 'Enable Atomic Edit', 'blaze-widgets-for-elementor' ); ?></th>
-						<td>
-							<label>
-								<input name="enable_atomic_edit" type="checkbox" value="1" <?php checked( $enable_atomic_edit ); ?>>
-								<strong><?php esc_html_e( 'Enable Atomic Edit mode on Blaze custom components', 'blaze-widgets-for-elementor' ); ?></strong>
-							</label>
-							<p class="description">
-								<?php esc_html_e( 'When enabled, components will output data-atomic-edit attributes for compatibility with atomic editing tools.', 'blaze-widgets-for-elementor' ); ?>
-							</p>
-						</td>
-					</tr>
-					<tr>
-						<th scope="row"><label for="atomic_edit_mode"><?php esc_html_e( 'Atomic Edit Mode', 'blaze-widgets-for-elementor' ); ?></label></th>
-						<td>
-							<select name="atomic_edit_mode" id="atomic_edit_mode">
-								<option value="isolated" <?php selected( $atomic_mode, 'isolated' ); ?>><?php esc_html_e( 'Isolated (Standard)', 'blaze-widgets-for-elementor' ); ?></option>
-								<option value="inline" <?php selected( $atomic_mode, 'inline' ); ?>><?php esc_html_e( 'Inline DOM editing', 'blaze-widgets-for-elementor' ); ?></option>
-							</select>
-						</td>
-					</tr>
-				</table>
+						<table class="form-table">
+							<tr>
+								<th scope="row"><?php esc_html_e( 'Enable Atomic Edit', 'blaze-widgets-for-elementor' ); ?></th>
+								<td>
+									<label>
+										<input name="enable_atomic_edit" type="checkbox" value="1" <?php checked( $enable_atomic_edit ); ?>>
+										<strong><?php esc_html_e( 'Enable Atomic Edit mode on Blaze custom components', 'blaze-widgets-for-elementor' ); ?></strong>
+									</label>
+									<p class="description">
+										<?php esc_html_e( 'When enabled, components will output data-atomic-edit attributes for compatibility with atomic editing tools.', 'blaze-widgets-for-elementor' ); ?>
+									</p>
+								</td>
+							</tr>
+							<tr>
+								<th scope="row"><label for="atomic_edit_mode"><?php esc_html_e( 'Atomic Edit Mode', 'blaze-widgets-for-elementor' ); ?></label></th>
+								<td>
+									<select name="atomic_edit_mode" id="atomic_edit_mode">
+										<option value="isolated" <?php selected( $atomic_mode, 'isolated' ); ?>><?php esc_html_e( 'Isolated (Standard)', 'blaze-widgets-for-elementor' ); ?></option>
+										<option value="inline" <?php selected( $atomic_mode, 'inline' ); ?>><?php esc_html_e( 'Inline DOM editing', 'blaze-widgets-for-elementor' ); ?></option>
+									</select>
+								</td>
+							</tr>
+						</table>
 
-				<p class="submit">
-					<button type="submit" class="button button-primary"><?php esc_html_e( 'Save Settings', 'blaze-widgets-for-elementor' ); ?></button>
-				</p>
-			</form>
+						<p class="blaze-builder__submit">
+							<button type="submit" class="blaze-btn blaze-btn--primary">
+								<span class="dashicons dashicons-saved" aria-hidden="true"></span>
+								<?php esc_html_e( 'Save Settings', 'blaze-widgets-for-elementor' ); ?>
+							</button>
+						</p>
+					</form>
+				</div>
+			</div>
+
+			<footer class="blaze-footer-pattern blaze-footer-pattern--wave" aria-hidden="true"></footer>
 		</div>
 		<?php
 	}
