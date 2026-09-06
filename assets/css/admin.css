@@ -1,0 +1,107 @@
+/**
+ * Blaze Widgets Admin & Editor Styles
+ */
+
+.blaze-widgets-admin-header {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	padding: 16px 0;
+}
+
+.blaze-widgets-admin-header .blaze-widgets-logo {
+	font-size: 22px;
+	color: #fff;
+	background: #2563eb;
+	border-radius: 8px;
+	padding: 8px 14px;
+	display: inline-flex;
+	align-items: center;
+	font-weight: 700;
+}
+
+.blaze-widgets-admin-header h1 {
+	margin: 0;
+	font-weight: 700;
+}
+
+.blaze-widgets-dashboard-grid {
+	display: grid;
+	grid-template-columns: 2fr 1fr;
+	gap: 20px;
+	align-items: start;
+	margin-top: 20px;
+}
+
+@media (max-width: 1200px) {
+	.blaze-widgets-dashboard-grid {
+		grid-template-columns: 1fr;
+	}
+}
+
+.blaze-widgets-list .wp-list-table th {
+	font-weight: 600;
+}
+
+.blaze-widgets-sidebar .postbox {
+	margin-bottom: 16px;
+}
+
+.blaze-widgets-sidebar .postbox h2 {
+	font-size: 14px;
+	padding: 12px 14px;
+	margin: 0;
+	border-bottom: 1px solid #ccd0d4;
+}
+
+.blaze-widgets-sidebar .postbox .inside {
+	padding: 12px 14px;
+}
+
+.blaze-widgets-status-active {
+	color: #007017;
+	font-weight: 600;
+}
+
+.blaze-widgets-status-inactive {
+	color: #9aa0a7;
+	font-weight: 600;
+}
+
+.blaze-widgets-codearea {
+	font-family: Consolas, Monaco, monospace;
+	tab-size: 4;
+}
+
+.blaze-widgets-tip-list {
+	margin: 0;
+	padding-left: 18px;
+}
+
+.blaze-widgets-tip-list li {
+	margin-bottom: 6px;
+}
+
+.blaze-widgets-builder textarea.code {
+	width: 100%;
+	max-width: 100%;
+}
+
+.blaze-widgets-badge {
+	display: inline-block;
+	background: #f0f4ff;
+	color: #2563eb;
+	border: 1px solid #c7d8ff;
+	border-radius: 999px;
+	padding: 2px 10px;
+	font-size: 11px;
+	font-weight: 600;
+}
+
+.elementor-element .blaze-widgets-editor-placeholder {
+	border: 2px dashed #ccd0d4;
+	border-radius: 8px;
+	padding: 24px;
+	text-align: center;
+	color: #6b7280;
+}
