@@ -1,0 +1,40 @@
+/**
+ * Blaze Widgets — admin sidebar menu icon.
+ *
+ * The brand mark (blaze-icon.svg) renders on the transparent menu default:
+ * no colored tile, no shadow. Scoped to the top-level menu node only;
+ * loaded on every admin screen so the brand shows from the first load.
+ */
+
+#adminmenu .toplevel_page_blaze-widgets div.wp-menu-image {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: transparent;
+	box-shadow: none;
+}
+
+#adminmenu .toplevel_page_blaze-widgets div.wp-menu-image img {
+	width: 20px;
+	height: 20px;
+	padding: 0;
+	opacity: 1;
+	filter: none;
+	object-fit: contain;
+	display: block;
+}
+
+/* Collapsed icon-only menu keeps padding consistent with the default. */
+@media (min-width: 961px) {
+	#adminmenu .toplevel_page_blaze-widgets.collapsed div.wp-menu-image {
+		margin: 6px 0;
+	}
+}
+
+/* Mobile admin menu (hamburger) shows the icon large enough to read. */
+@media (max-width: 960px) {
+	#adminmenu .toplevel_page_blaze-widgets div.wp-menu-image img {
+		width: 22px;
+		height: 22px;
+	}
+}
