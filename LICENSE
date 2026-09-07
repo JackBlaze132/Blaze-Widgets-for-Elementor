@@ -1,0 +1,89 @@
+Blaze Widgets for Elementor — Free Software, Paid Templates License
+Copyright (c) 2026 JackBlaze132 (https://github.com/JackBlaze132)
+
+This license governs the Software (source, code, and compiled plugin). It
+does NOT govern user-uploaded templates — see Clause 4 below.
+
+0. Definitions.
+
+   "Software" means this plugin: the PHP source code, JavaScript, CSS,
+   SVG assets shipped with it, autoloader, documentation shipped alongside
+   the code, and any modified or derivative version of those files.
+
+   "Template" means a JSON-defined widget component authored by a user
+   inside the plugin's admin component library, whether authored from
+   scratch, imported, or modified by a user.
+
+   "Template Pack" means a curated collection of Templates distributed
+   together as a single product, separately from the Software itself.
+
+   "Derivative Work" means any modified version of the Software, any fork,
+   any plugin built substantially on top of this Software's code, or any
+   product that re-distributes the Software (or a non-trivial subset of
+   it) as part of its distribution.
+
+Permission is hereby granted, free of charge, to any person obtaining a
+copy of this Software, to use, run, study, and integrate the Software
+without restriction, including (without limitation) on WordPress
+installations with the Elementor page builder, whether for personal or
+commercial projects. The following additional terms apply to
+distribution and derivative works:
+
+1.  Free to use, free to run, free to integrate.
+    You may use the Software on any number of websites, including
+    client websites, without paying any fee to the author. You may embed
+    the Software in private builds, fork it for evaluation, study it, and
+    modify it for your own use.
+
+2.  No sale of the Software itself.
+    You may NOT sell, sublicense, or commercially distribute the
+    Software (modified or unmodified) as a software product, in whole or
+    in part, in source or compiled form, on its own or bundled with
+    unrelated software. The Software must remain free of charge. This
+    includes (without limitation) selling forks, selling "premium"
+    editions of this plugin, reselling the Software through marketplaces,
+    charging for access to the Software's source, or wrapping the
+    Software in a paid "white-label" plugin.
+
+3.  Derivative Works must also be free.
+    Any Derivative Work distributed publicly — including forks, ports,
+    substantially modified versions, or products that include the
+    Software's source as a non-trivial part of their distribution —
+    must itself be made available free of charge under terms no more
+    restrictive than this license, and must retain visible attribution to
+    the original source: "Blaze Widgets for Elementor" by JackBlaze132,
+    including a link to https://github.com/JackBlaze132/Blaze-Widgets-for-Elementor.
+
+4.  Templates and Template Packs are yours.
+    Templates authored by a user inside the plugin's admin UI remain the
+    property of their creator. The author of the Software claims no
+    ownership of user-authored Templates and accepts no responsibility
+    for their content. EXCEPTION: because Templates are user content and
+    not source code of the Software, Template Packs may be sold, licensed,
+    and distributed for profit. A Template Pack is content, not a fork:
+    it does not bundle the Software itself.
+
+5.  WordPress plugin repository.
+    Nothing in this license prevents the Software from being hosted on
+    the official WordPress.org plugin directory, which has its own terms.
+
+6.  Trademarks.
+    "WordPress" and "Elementor" are trademarks of their respective
+    owners. This license does not grant any rights to use those
+    trademarks beyond nominative reference to the platforms the Software
+    integrates with. The "Blaze" name and the Blaze monogram mark are
+    used to identify authorship and origin; forks and derivative works
+    must not use the Blaze marks in a way that suggests endorsement by
+    the original author.
+
+7.  No warranty.
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+    EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+    MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+    NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+    BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+    ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    SOFTWARE.
+
+End of terms.
