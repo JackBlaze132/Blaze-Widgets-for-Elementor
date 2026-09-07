@@ -1,6 +1,19 @@
-# Blaze Widgets for Elementor
+<div align="center">
+
+<img src="assets/img/blaze-logo.svg" alt="Blaze Widgets for Elementor" width="288">
 
 A modular and scalable library of custom widgets for Elementor.
+
+<a href='https://ko-fi.com/I2I612K2L0' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://storage.ko-fi.com/cdn/kofi3.png?v=6' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
+
+[![Download](https://img.shields.io/badge/Download-Latest%20Release-39DC48?style=for-the-badge&logo=github&logoColor=white)](https://github.com/JackBlaze132/Blaze-Widgets-for-Elementor/releases)
+
+[![WordPress](https://img.shields.io/badge/WordPress-6.0%2B-21759b?style=for-the-badge&logo=wordpress&logoColor=white)](https://wordpress.org/)
+[![Elementor](https://img.shields.io/badge/Elementor-3.5%2B-92003B?style=for-the-badge&logo=elementor&logoColor=white)](https://elementor.com/)
+[![PHP](https://img.shields.io/badge/PHP-7.4%2B-777BB4?style=for-the-badge&logo=php&logoColor=white)](https://www.php.net/)
+[![License](https://img.shields.io/badge/License-See%20LICENSE-39DC48?style=for-the-badge)](LICENSE)
+
+</div>
 
 Blaze Widgets for Elementor is designed as a reusable component library, not as a single-widget plugin. Each widget lives in its own self-contained module, and adding new widgets is predictable and isolated.
 
@@ -404,6 +417,15 @@ Plugin options created by Blaze Widgets (`blaze_widgets_custom_definitions` for 
 - [x] No jQuery dependency
 - [x] Translation-ready
 
+## Credit
+
+Created with ♥ by [Blaze](https://github.com/JackBlaze132). If this plugin saves you time, [buy me a coffee](https://ko-fi.com/I2I612K2L0).
+
 ## License
 
-GPL-2.0-or-later
+See [LICENSE](LICENSE) for the full text. In short:
+
+- The software itself must stay **free** — no selling this plugin or forks of it as a software product.
+- **Template Packs** built with the plugin (collections of components you author in the admin UI) are user content and **may be sold** as content packages, because they are not source code of the Software.
+- Free to use on WordPress with Elementor, free to fork, free to modify for your own use.
+- Derivative Works distributed publicly must also be free and must credit the original source.
