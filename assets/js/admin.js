@@ -35,4 +35,32 @@
 			}
 		});
 	}
+
+	// Ko-fi banner: visible by default; hidden only if the user dismissed it on this browser.
+	const kofiBanner = document.getElementById('blaze-kofi-banner');
+	if (kofiBanner) {
+		const STORAGE_KEY = 'blaze_widgets_kofi_banner_dismissed_v2';
+		let dismissed = false;
+		try {
+			dismissed = window.localStorage.getItem(STORAGE_KEY) === '1';
+		} catch (err) {
+			dismissed = false;
+		}
+
+		if (dismissed) {
+			kofiBanner.setAttribute('hidden', '');
+		}
+
+		const closeBtn = kofiBanner.querySelector('[data-blaze-kofi-close]');
+		if (closeBtn) {
+			closeBtn.addEventListener('click', () => {
+				try {
+					window.localStorage.setItem(STORAGE_KEY, '1');
+				} catch (err) {
+					// Storage unavailable (private mode, sandboxed iframe, etc.).
+				}
+				kofiBanner.setAttribute('hidden', '');
+			});
+		}
+	}
 })();

@@ -50,7 +50,10 @@ class Assets_Manager {
 	 * @param string $hook Current admin page hook.
 	 */
 	public function enqueue_admin_assets( $hook ): void {
-		if ( false === strpos( $hook, 'blaze-widgets' ) ) {
+		// Load on Blaze plugin screens plus the WordPress-wide promo surfaces
+		// (home dashboard + Plugins page) where the Ko-fi banner appears.
+		$is_promo_screen = in_array( $hook, [ 'index.php', 'plugins.php' ], true );
+		if ( false === strpos( $hook, 'blaze-widgets' ) && ! $is_promo_screen ) {
 			return;
 		}
 

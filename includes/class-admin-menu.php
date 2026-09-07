@@ -28,6 +28,161 @@ class Admin_Menu {
 	public function __construct() {
 		add_action( 'admin_menu', [ $this, 'register_admin_menus' ] );
 		add_action( 'admin_init', [ $this, 'handle_actions' ] );
+		add_action( 'pre_current_active_plugins', [ $this, 'render_plugins_promo' ] );
+		add_action( 'wp_dashboard_setup', [ $this, 'register_dashboard_promo' ] );
+	}
+
+	/**
+	 * Render the Ko-fi promo below the Plugins page title.
+	 *
+	 * WordPress fires `pre_current_active_plugins` right after the
+	 * `<h1>Plugins</h1>` header and `<hr class="wp-header-end">`, which is the
+	 * native slot for integrated (non-floating) notices on that screen.
+	 */
+	public function render_plugins_promo(): void {
+		if ( ! is_admin() ) {
+			return;
+		}
+		$this->render_kofi_banner();
+	}
+
+	/**
+	 * Register the promo as a native Dashboard widget.
+	 *
+	 * Rendered inside the dashboard widget grid (below the "Dashboard"
+	 * title) instead of floating at the top via `admin_notices`.
+	 */
+	public function register_dashboard_promo(): void {
+		wp_add_dashboard_widget(
+			'blaze-kofi-promo',
+			esc_html__( 'Support Blaze Widgets', 'blaze-widgets-for-elementor' ),
+			[ $this, 'render_dashboard_promo' ],
+			null,
+			null,
+			'normal',
+			'high'
+		);
+	}
+
+	/**
+	 * Output the promo banner inside the dashboard widget.
+	 */
+	public function render_dashboard_promo(): void {
+		$this->render_kofi_banner();
+	}
+
+	/**
+	 * Dismissible Ko-fi banner.
+	 *
+	 * `$button_only` renders just the ko-fi button widget (used when the
+	 * banner is integrated into a Blaze page header) without the message
+	 * text, the dismiss button, or the enclosing banner shell.
+	 *
+	 * Visible by default; admin.js hides it only if the user already
+	 * dismissed it on this browser. Showing it by default means a banner
+	 * is never lost to a JS / localStorage failure.
+	 *
+	 * @param bool $button_only Render only the ko-fi button widget.
+	 */
+	public function render_kofi_banner( bool $button_only = false ): void {
+		if ( $button_only ) {
+			$this->render_kofi_header_widget();
+			return;
+		}
+		?>
+		<div class="blaze-kofi" id="blaze-kofi-banner">
+			<p class="blaze-kofi__message">
+				<?php esc_html_e( 'If you like', 'blaze-widgets-for-elementor' ); ?>
+				<strong class="blaze-kofi__brand"><?php esc_html_e( 'Blaze Widgets', 'blaze-widgets-for-elementor' ); ?></strong>
+				<?php esc_html_e( ', please consider to', 'blaze-widgets-for-elementor' ); ?>
+			</p>
+			<?php $this->render_kofi_banner_widget(); ?>
+			<button type="button" class="blaze-kofi__close" data-blaze-kofi-close aria-label="<?php esc_attr_e( 'Dismiss', 'blaze-widgets-for-elementor' ); ?>">
+				<span class="dashicons dashicons-no-alt" aria-hidden="true"></span>
+			</button>
+		</div>
+		<script type="text/javascript">
+			// Hide immediately for visitors who dismissed the banner. Waiting for
+			// footer scripts would flash the banner for one render on every load.
+			try {
+				if ( window.localStorage.getItem( 'blaze_widgets_kofi_banner_dismissed_v2' ) === '1' ) {
+					document.getElementById( 'blaze-kofi-banner' ).setAttribute( 'hidden', '' );
+				}
+			} catch ( e ) {}
+		</script>
+		<?php
+	}
+
+	/**
+	 * The ko-fi widget button shown in the Blaze page headers.
+	 *
+	 * Always rendered, so the button stays visible permanently even for
+	 * visitors who dismissed the banner elsewhere on the site.
+	 */
+	public function render_kofi_header_widget(): void {
+		?>
+		<span class="blaze-kofi__widget">
+			<script type="text/javascript" src="https://storage.ko-fi.com/cdn/widget/Widget_2.js"></script>
+			<script type="text/javascript">
+				kofiwidget2.init( '<?php echo esc_js( __( 'Buy me a coffee', 'blaze-widgets-for-elementor' ) ); ?>', '#ffffff', 'I2I612K2L0' );
+				kofiwidget2.draw();
+			</script>
+		</span>
+		<?php
+	}
+
+	/**
+	 * The ko-fi widget button inside the banner.
+	 *
+	 * Skips drawing for visitors who already dismissed the banner — the
+	 * banner is hidden for them anyway, so this saves the ko-fi script and
+	 * iframe load on every Plugins/Dashboard visit.
+	 */
+	public function render_kofi_banner_widget(): void {
+		?>
+		<span class="blaze-kofi-banner__widget">
+			<script type="text/javascript" src="https://storage.ko-fi.com/cdn/widget/Widget_2.js"></script>
+			<script type="text/javascript">
+				(function () {
+					var dismissed = false;
+					try {
+						dismissed = window.localStorage.getItem( 'blaze_widgets_kofi_banner_dismissed_v2' ) === '1';
+					} catch ( e ) {
+						dismissed = false;
+					}
+					if ( dismissed ) {
+						return;
+					}
+					kofiwidget2.init( '<?php echo esc_js( __( 'Buy me a coffee', 'blaze-widgets-for-elementor' ) ); ?>', '#ffffff', 'I2I612K2L0' );
+					kofiwidget2.draw();
+				})();
+			</script>
+		</span>
+		<?php
+	}
+
+	/**
+	 * Small right-aligned author credit card.
+	 *
+	 * Used inside the Blaze admin pages as a subtle in-page footer instead
+	 * of replacing the WordPress admin footer text.
+	 */
+	public function render_footer_card(): void {
+		$github = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.55v-2.17c-3.2.7-3.88-1.54-3.88-1.54-.52-1.32-1.27-1.67-1.27-1.67-1.04-.71.08-.7.08-.7 1.15.08 1.75 1.18 1.75 1.18 1.02 1.75 2.68 1.25 3.33.95.1-.74.4-1.25.73-1.54-2.55-.29-5.23-1.28-5.23-5.68 0-1.26.45-2.28 1.18-3.09-.12-.29-.51-1.46.11-3.05 0 0 .96-.31 3.15 1.18a10.9 10.9 0 0 1 2.87-.39c.97 0 1.95.13 2.87.39 2.19-1.49 3.15-1.18 3.15-1.18.62 1.59.23 2.76.11 3.05.73.81 1.18 1.83 1.18 3.09 0 4.4-2.68 5.38-5.24 5.67.41.35.78 1.05.78 2.12v3.14c0 .3.2.66.8.55A11.51 11.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/></svg>';
+		?>
+		<div class="blaze-footer-card">
+			<span class="blaze-footer-card__text">
+				<?php esc_html_e( 'Crafted with', 'blaze-widgets-for-elementor' ); ?>
+				<span class="blaze-footer-heart" aria-hidden="true">&#10084;</span>
+				<?php esc_html_e( 'by', 'blaze-widgets-for-elementor' ); ?>
+			</span>
+			<a class="blaze-footer-credit" href="https://github.com/JackBlaze132" target="_blank" rel="noopener noreferrer">
+				Blaze
+				<span class="screen-reader-text"><?php esc_html_e( 'GitHub profile', 'blaze-widgets-for-elementor' ); ?></span>
+				<?php echo $github; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+			</a>
+		</div>
+		<?php
 	}
 
 	/**
@@ -202,6 +357,7 @@ class Admin_Menu {
 					<p><?php esc_html_e( 'Your custom Elementor component library, all in one place.', 'blaze-widgets-for-elementor' ); ?></p>
 				</div>
 				<span class="blaze-header__action">
+					<?php $this->render_kofi_header_widget(); ?>
 					<a href="<?php echo esc_url( admin_url( 'admin.php?page=blaze-widgets-builder' ) ); ?>" class="blaze-btn blaze-btn--primary">
 						<span class="dashicons dashicons-plus-alt2" aria-hidden="true"></span>
 						<?php esc_html_e( 'Create New Component', 'blaze-widgets-for-elementor' ); ?>
@@ -355,6 +511,8 @@ class Admin_Menu {
 							</ul>
 						</div>
 					</div>
+
+					<?php $this->render_footer_card(); ?>
 				</aside>
 			</div>
 
@@ -409,6 +567,7 @@ class Admin_Menu {
 					<p><?php esc_html_e( 'Define your controls, HTML template with Dynamic Tag placeholders, scoped CSS, and scripts.', 'blaze-widgets-for-elementor' ); ?></p>
 				</div>
 				<span class="blaze-header__action">
+					<?php $this->render_kofi_header_widget(); ?>
 					<a href="<?php echo esc_url( admin_url( 'admin.php?page=blaze-widgets' ) ); ?>" class="blaze-btn">
 						<span class="dashicons dashicons-arrow-left-alt2" aria-hidden="true"></span>
 						<?php esc_html_e( 'Back to Library', 'blaze-widgets-for-elementor' ); ?>
@@ -514,13 +673,15 @@ class Admin_Menu {
 				</div>
 			</div>
 
+			<?php $this->render_footer_card(); ?>
+
 			<footer class="blaze-footer-pattern blaze-footer-pattern--wave" aria-hidden="true"></footer>
 		</div>
 		<?php
 	}
 
 	/**
-	 * Render Settings & Integrations Page (Atomic Edit, etc).
+	 * Render Settings Page.
 	 */
 	public function render_settings_page(): void {
 		$settings           = Settings::get_all();
@@ -536,6 +697,9 @@ class Admin_Menu {
 					<h1><?php esc_html_e( 'Blaze Widgets Settings', 'blaze-widgets-for-elementor' ); ?></h1>
 					<p><?php esc_html_e( 'Configure general behaviors and optional integrations for your component library.', 'blaze-widgets-for-elementor' ); ?></p>
 				</div>
+				<span class="blaze-header__action">
+					<?php $this->render_kofi_header_widget(); ?>
+				</span>
 			</header>
 
 			<?php if ( isset( $_GET['status'] ) && 'settings_saved' === $_GET['status'] ) : ?>
@@ -593,6 +757,8 @@ class Admin_Menu {
 					</form>
 				</div>
 			</div>
+
+			<?php $this->render_footer_card(); ?>
 
 			<footer class="blaze-footer-pattern blaze-footer-pattern--wave" aria-hidden="true"></footer>
 		</div>

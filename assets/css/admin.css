@@ -16,7 +16,7 @@
 :root {
 	--blaze-green: #39dc48;
 	--blaze-green-bright: #88f333;
-	--blaze-gradient: linear-gradient(135deg, #39dc48 0%, #88f333 100%);
+	--blaze-gradient: linear-gradient(135deg, #20af2d 0%, #5dd200 100%);
 	--blaze-green-soft: rgba(57, 220, 72, 0.1);
 	--blaze-ink: #10231a;
 	--blaze-muted: #5c6b63;
@@ -87,6 +87,9 @@
 }
 
 .blaze-header__action {
+	display: flex;
+	align-items: center;
+	gap: 12px;
 	margin-left: auto;
 	white-space: nowrap;
 }
@@ -163,6 +166,135 @@
 	border-left: none;
 	border-radius: 12px;
 	box-shadow: var(--blaze-shadow);
+}
+
+/* ---------- Ko-fi banner ---------- */
+
+.blaze-kofi {
+	display: flex;
+  align-items: center;
+  gap: 12px;
+  background-color: #3e6e65;
+  color: #ffffff;
+  border-radius: 14px;
+  padding: 10px 14px;
+  box-shadow: 0 4px 10px rgba(13, 15, 14, 0.25);
+  position: relative;
+  overflow: hidden;
+  background-image: url("../img/blaze-footer.svg");;
+}
+
+/* The HTML `hidden` attribute must beat our explicit `display: flex`. */
+.blaze-kofi[hidden] {
+	display: none;
+}
+
+.blaze-kofi::before {
+	content: "";
+	position: absolute;
+	inset: 0;
+	background: radial-gradient(circle at 90% 0%, rgba(57, 220, 72, 0.18), transparent 60%);
+	pointer-events: none;
+}
+
+.blaze-kofi__message {
+	margin: 0;
+	min-width: 0;
+	font-size: 13px;
+	line-height: 1.4;
+	color: #ffffff;
+	position: relative;
+}
+
+.blaze-kofi__brand {
+	color: var(--blaze-green);
+	font-weight: 700;
+}
+
+/* Header button (Blaze pages): auto-sized, always visible. */
+.blaze-kofi__widget {
+	flex: 0 0 auto;
+	display: inline-flex;
+	align-items: center;
+	line-height: 1;
+	position: relative;
+}
+
+/* Banner button (Plugins page / Dashboard widget). */
+.blaze-kofi-banner__widget {
+	flex: 1;
+	display: inline-flex;
+	align-items: center;
+	line-height: 0;
+	position: relative;
+}
+
+.blaze-kofi__widget iframe,
+.blaze-kofi__widget a,
+.blaze-kofi-banner__widget iframe,
+.blaze-kofi-banner__widget a {
+	line-height: 0;
+}
+
+/* The ko-fi widget's own button already carries the styling we want:
+   keep its label readable on the white button and let it size itself. */
+.blaze-kofi__widget a.kofi-button {
+	border-radius: 12px;
+  	box-shadow: 0 4px 10px rgba(0,0,0,.15);
+}
+
+.blaze-kofi-banner__widget a.kofi-button {
+	padding: 0 !important;
+}
+
+.blaze-kofi__widget span.kofitext,
+.blaze-kofi-banner__widget span.kofitext {
+	color: #000 !important;
+}
+
+.blaze-kofi__close {
+	background: transparent;
+	border: none;
+	color: rgba(255, 255, 255, 0.7);
+	cursor: pointer;
+	padding: 4px 6px;
+	border-radius: 8px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	transition: color 0.18s ease, background 0.18s ease;
+	position: relative;
+}
+
+.blaze-kofi__close:hover,
+.blaze-kofi__close:focus {
+	color: #ffffff;
+	background: rgba(255, 255, 255, 0.12);
+}
+
+.blaze-kofi__close .dashicons {
+	width: 18px;
+	height: 18px;
+	font-size: 18px;
+}
+
+@media (max-width: 600px) {
+	.blaze-kofi {
+		flex-wrap: wrap;
+		gap: 10px;
+	}
+	.blaze-kofi__message {
+		flex: 1 0 100%;
+		margin-bottom: 4px;
+	}
+	.blaze-kofi-banner__widget {
+		flex: 1 1 auto;
+		justify-content: center;
+	}
+}
+
+#blaze-kofi-promo .blaze-kofi {
+	margin-bottom: 0;
 }
 
 /* ---------- Dashboard grid ---------- */
@@ -576,6 +708,55 @@
 		height: 64px;
 		background-size: auto 64px;
 		margin: 24px -12px 0;
+	}
+}
+
+/* ---------- In-page footer card ---------- */
+
+.blaze-footer-card {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	gap: 8px;
+	margin-top: 16px;
+	padding: 0 4px;
+	font-size: 12px;
+	color: var(--blaze-muted, #7b8c80);
+}
+
+.blaze-footer-card__text {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+}
+
+.blaze-footer-heart {
+	color: #e25555;
+	display: inline-block;
+	transform: translateY(1px);
+}
+
+.blaze-footer-credit {
+	color: var(--blaze-green);
+	text-decoration: none;
+	font-weight: 600;
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+}
+
+.blaze-footer-credit:hover,
+.blaze-footer-credit:focus {
+	color: var(--blaze-green-bright);
+}
+
+.blaze-footer-credit svg {
+	vertical-align: middle;
+}
+
+@media (max-width: 782px) {
+	.blaze-footer-card {
+		justify-content: flex-start;
 	}
 }
 
