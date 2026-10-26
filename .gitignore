@@ -3,3 +3,5 @@ Thumbs.db
 *.log
 node_modules/
 templates/
+dist/
+RELEASE-NOTES.md
