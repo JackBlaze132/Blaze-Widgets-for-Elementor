@@ -3,7 +3,7 @@
  * Plugin Name: Blaze Widgets for Elementor
  * Plugin URI: https://github.com/blaze/blaze-widgets-for-elementor
  * Description: A modular and scalable library of custom widgets for Elementor.
- * Version: 1.0.0
+ * Version: 1.1.0
  * Author: Blaze
  * Author URI: https://blaze.example.com
  * Text Domain: blaze-widgets-for-elementor
@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'BLAZE_WIDGETS_VERSION', '1.0.0' );
+define( 'BLAZE_WIDGETS_VERSION', '1.1.0' );
 define( 'BLAZE_WIDGETS_MINIMUM_PHP_VERSION', '7.4' );
 define( 'BLAZE_WIDGETS_MINIMUM_ELEMENTOR_VERSION', '3.5.0' );
 define( 'BLAZE_WIDGETS_MINIMUM_WP_VERSION', '5.9' );

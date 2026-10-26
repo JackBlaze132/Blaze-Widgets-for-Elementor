@@ -235,6 +235,17 @@ class Dynamic_Custom_Widget extends Base_Widget {
 		}
 
 		$args = $this->resolve_control_args( $ctrl );
+
+		// Opt-in responsive styles. Templates flag a style control with
+		// "responsive": true so Elementor emits per-device media queries for
+		// its selectors. Only simple value controls can be made responsive.
+		$responsive_types = [ 'text', 'number', 'select', 'color' ];
+
+		if ( ! empty( $ctrl['responsive'] ) && in_array( $type, $responsive_types, true ) ) {
+			$this->add_responsive_control( $id, $args );
+			return;
+		}
+
 		$this->add_control( $id, $args );
 	}
 
@@ -402,6 +413,16 @@ class Dynamic_Custom_Widget extends Base_Widget {
 		// Repeater children cannot use selectors; only top-level style controls can.
 		if ( ! $in_repeater && ! empty( $ctrl['selectors'] ) && is_array( $ctrl['selectors'] ) ) {
 			$args['selectors'] = $ctrl['selectors'];
+		}
+
+		// Forward per-device defaults so responsive controls keep their
+		// tablet/mobile design values without manual overrides.
+		if ( ! $in_repeater ) {
+			foreach ( [ 'tablet_default', 'mobile_default' ] as $device_default_key ) {
+				if ( array_key_exists( $device_default_key, $ctrl ) ) {
+					$args[ $device_default_key ] = $ctrl[ $device_default_key ];
+				}
+			}
 		}
 
 		return $args;
